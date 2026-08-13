@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Card Scanner Workspace</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { background-color: #FCF3FF; font-family: 'Segoe UI', sans-serif; }
+        .card-custom { background: white; border-radius: 16px; border: none; box-shadow: 0 8px 25px rgba(147, 112, 219, 0.12); }
+    </style>
+</head>
+<body class="py-4">
+    <div class="container col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4>Card Scanner Workspace (<strong class="text-primary">{{ username }}</strong>)</h4>
+            <a href="/logout" class="btn btn-outline-danger btn-sm">Logout</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}{% for category, message in messages %}
+            <div class="alert alert-{{ category }} p-2 text-center">{{ message }}</div>
+          {% endfor %}{% endif %}
+        {% endwith %}
+
+        <div class="card card-custom p-4 mb-4">
+            <h5 class="fw-bold mb-3">Upload Card Photo</h5>
+            <p class="text-muted small">Supports ID Cards (KTP), Bank Cards, Student IDs, etc.</p>
+
+            <form action="/ocr" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input type="file" name="ocr_image" class="form-control" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Scan & Read Card</button>
+            </form>
+        </div>
+
+        <!-- OCR OUTCOME RESULTS -->
+        {% if outcome %}
+            {% if outcome.status == 'rejected' %}
+                <div class="card card-custom p-4 border border-danger">
+                    <h5 class="text-danger fw-bold">{{ outcome.message }}</h5>
+                    <p class="text-secondary mb-0">{{ outcome.detail }}</p>
+                </div>
+
+            {% elif outcome.status == 'registered' %}
+                <div class="card card-custom p-4 border border-success">
+                    <h5 class="text-success fw-bold">{{ outcome.message }}</h5>
+                    <p class="text-secondary mb-0">{{ outcome.detail }}</p>
+                </div>
+
+            {% elif outcome.status == 'success' %}
+                <div class="card card-custom p-4">
+                    <h5 class="text-success fw-bold mb-3">{{ outcome.message }}</h5>
+                    <h6>Detected Card Text:</h6>
+                    <ul class="list-group list-group-flush">
+                        {% for line in outcome.results %}
+                            <li class="list-group-item bg-light">- {{ line }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>

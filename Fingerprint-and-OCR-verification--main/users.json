@@ -1,0 +1,14 @@
+{
+    "admin": {
+        "password": "admin123",
+        "fingerprint_path": "C:\\Users\\Carol\\Documents\\Assignment UNIJI 2025\\All Project DIV 2026\\Fingerprint Verification\\Fingerprint 1.jpg",
+        "status": "approved",
+        "role": "admin"
+    },
+    "Ivan": {
+        "password": "123456",
+        "fingerprint_path": "C:\\Users\\Carol\\Documents\\Assignment UNIJI 2025\\All Project DIV 2026\\Fingerprint Verification\\user_fingerprints\\Ivan_fp.jpg",
+        "status": "approved",
+        "role": "user"
+    }
+}
